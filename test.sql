@@ -1,0 +1,1 @@
+SELECT * FROM expense_categories;
