@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="gov-header">
+        <h1>Crop Requirements Guide</h1>
+        <p>Get comprehensive daily needs for your crops</p>
+    </div>
+
+    <div class="form-container">
+        <h3>Select Your Crop</h3>
+        <form id="cropForm">
+            <div class="form-group">
+                <label for="crop">Crop Type</label>
+                <select id="crop" name="crop" class="form-control" required>
+                    <option value="">Select a crop</option>
+                    <option value="wheat">Wheat</option>
+                    <option value="rice">Rice</option>
+                    <option value="cotton">Cotton</option>
+                    <option value="maize">Maize</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-primary">Get Requirements</button>
+        </form>
+    </div>
+
+    <div id="requirementsDisplay" style="display: none;">
+        <div class="card">
+            <div class="card-header">Daily Needs and Required Items for <span id="cropName"></span></div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5>Inputs</h5>
+                        <ul id="inputsList" class="list-group list-group-flush"></ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Tools</h5>
+                        <ul id="toolsList" class="list-group list-group-flush"></ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Daily Consumables</h5>
+                        <ul id="consumablesList" class="list-group list-group-flush"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const cropData = {
+    wheat: {
+        inputs: ["High-quality Wheat Seeds", "NPK Fertilizer (20-20-20)", "DAP Fertilizer", "Fungicides", "Herbicides"],
+        tools: ["Seed Drill", "Sprayers", "Ploughs", "Irrigation Pipes", "Harvesting Combine"],
+        daily_consumables: ["Diesel/Fuel for machinery", "Labor hours (2-3 workers)", "Electricity for irrigation"]
+    },
+    rice: {
+        inputs: ["Paddy Seeds", "Urea Fertilizer", "Potash Fertilizer", "Insecticides", "Weedicides"],
+        tools: ["Rice Transplanter", "Power Tillers", "Sprinklers", "Threshers", "Drying Fans"],
+        daily_consumables: ["Diesel/Fuel for pumps", "Labor hours (3-4 workers)", "Water for flooding"]
+    },
+    cotton: {
+        inputs: ["Cotton Seeds", "NPK Fertilizer", "Pesticides", "Insecticides", "Growth Regulators"],
+        tools: ["Cotton Picker", "Sprayers", "Cultivators", "Irrigation Systems", "Ginning Machine"],
+        daily_consumables: ["Diesel/Fuel for equipment", "Labor hours (2-3 workers)", "Electricity for processing"]
+    },
+    maize: {
+        inputs: ["Maize Seeds", "NPK Fertilizer", "Zinc Sulfate", "Pesticides", "Herbicides"],
+        tools: ["Planters", "Sprayers", "Harvesters", "Irrigation Pipes", "Dryers"],
+        daily_consumables: ["Diesel/Fuel for machinery", "Labor hours (2-3 workers)", "Electricity for irrigation"]
+    }
+};
+
+document.getElementById('cropForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const crop = document.getElementById('crop').value;
+    if (crop && cropData[crop]) {
+        displayRequirements(crop);
+    }
+});
+
+function displayRequirements(crop) {
+    const data = cropData[crop];
+    document.getElementById('cropName').textContent = crop.charAt(0).toUpperCase() + crop.slice(1);
+    document.getElementById('inputsList').innerHTML = data.inputs.map(item => `<li class="list-group-item">${item}</li>`).join('');
+    document.getElementById('toolsList').innerHTML = data.tools.map(item => `<li class="list-group-item">${item}</li>`).join('');
+    document.getElementById('consumablesList').innerHTML = data.daily_consumables.map(item => `<li class="list-group-item">${item}</li>`).join('');
+    document.getElementById('requirementsDisplay').style.display = 'block';
+}
+</script>
+{% endblock %}

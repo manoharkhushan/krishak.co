@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="gov-header">
+        <h1>Farming Calendar</h1>
+        <p>Plan your crop cycle with detailed requirements and costs</p>
+    </div>
+
+    <div class="form-container">
+        <h3>Select Your Farming Details</h3>
+        <form id="calendarForm">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="farmerSize">Farmer Size</label>
+                        <select id="farmerSize" name="farmerSize" class="form-control" required>
+                            <option value="">Select size</option>
+                            <option value="small">Small Farmer</option>
+                            <option value="medium">Medium Farmer</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="crop">Crop Type</label>
+                        <select id="crop" name="crop" class="form-control" required>
+                            <option value="">Select crop</option>
+                            <option value="wheat">Wheat</option>
+                            <option value="rice">Rice</option>
+                            <option value="cotton">Cotton</option>
+                            <option value="maize">Maize</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="landSize">Land Size (acres)</label>
+                        <input type="number" id="landSize" name="landSize" class="form-control" value="1" min="0.5" step="0.5" required>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn-primary">Generate Calendar</button>
+        </form>
+    </div>
+
+    <div id="calendarDisplay" style="display: none;">
+        <div class="card">
+            <div class="card-header">Farming Calendar for <span id="calendarTitle"></span></div>
+            <div class="card-body">
+                <div id="phasesContainer"></div>
+                <div class="mt-4">
+                    <h5>Total Estimated Cost: ₹<span id="totalCost">0</span> per acre</h5>
+                    <p class="text-muted">* Costs are approximate and may vary based on location and market conditions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const calendarData = {
+    small: {
+        wheat: {
+            sowing: {
+                items: ["High-quality Wheat Seeds (5kg)", "Basic Seed Drill", "Manual Plough", "Basic Irrigation Pipes"],
+                cost: 2500
+            },
+            growth: {
+                items: ["NPK Fertilizer (20kg)", "Pesticides (2L)", "Manual Sprayer", "Labor (2 workers/day)", "Water/Electricity"],
+                cost: 8500
+            },
+            harvest: {
+                items: ["Manual Harvester", "Storage Bags (50kg)", "Transportation", "Labor (3 workers)"],
+                cost: 3200
+            }
+        },
+        rice: {
+            sowing: {
+                items: ["Paddy Seeds (10kg)", "Rice Transplanter", "Water Pump", "Basic Irrigation Setup"],
+                cost: 4200
+            },
+            growth: {
+                items: ["Urea Fertilizer (25kg)", "Pesticides (3L)", "Manual Sprayer", "Labor (3 workers/day)", "Electricity for pumps"],
+                cost: 9200
+            },
+            harvest: {
+                items: ["Manual Thresher", "Drying Platform", "Storage Bags", "Transportation"],
+                cost: 3800
+            }
+        },
+        cotton: {
+            sowing: {
+                items: ["Cotton Seeds (3kg)", "Manual Planter", "Basic Sprayer", "Irrigation Pipes"],
+                cost: 2800
+            },
+            growth: {
+                items: ["NPK Fertilizer (15kg)", "Pesticides (2L)", "Manual Sprayer", "Labor (2 workers/day)", "Water supply"],
+                cost: 7200
+            },
+            harvest: {
+                items: ["Cotton Picker", "Storage Bags", "Processing Equipment", "Transportation"],
+                cost: 4100
+            }
+        },
+        maize: {
+            sowing: {
+                items: ["Maize Seeds (8kg)", "Manual Planter", "Basic Tools", "Irrigation Setup"],
+                cost: 3100
+            },
+            growth: {
+                items: ["NPK Fertilizer (20kg)", "Pesticides (2L)", "Manual Sprayer", "Labor (2 workers/day)", "Water/Electricity"],
+                cost: 7800
+            },
+            harvest: {
+                items: ["Manual Harvester", "Storage Bags", "Dryer", "Transportation"],
+                cost: 3500
+            }
+        }
+    },
+    medium: {
+        wheat: {
+            sowing: {
+                items: ["High-quality Wheat Seeds (15kg)", "Power Seed Drill", "Tractor Plough", "Irrigation System"],
+                cost: 12500
+            },
+            growth: {
+                items: ["NPK Fertilizer (60kg)", "Pesticides (5L)", "Power Sprayer", "Labor (4 workers/day)", "Electricity/Diesel"],
+                cost: 28500
+            },
+            harvest: {
+                items: ["Combine Harvester", "Storage Silos", "Transportation Truck", "Labor (5 workers)"],
+                cost: 15200
+            }
+        },
+        rice: {
+            sowing: {
+                items: ["Paddy Seeds (30kg)", "Rice Transplanter Machine", "Power Pump", "Advanced Irrigation"],
+                cost: 16800
+            },
+            growth: {
+                items: ["Urea Fertilizer (75kg)", "Pesticides (8L)", "Power Sprayer", "Labor (5 workers/day)", "Electricity/Diesel"],
+                cost: 31200
+            },
+            harvest: {
+                items: ["Power Thresher", "Mechanical Dryer", "Storage Facility", "Transportation"],
+                cost: 18900
+            }
+        },
+        cotton: {
+            sowing: {
+                items: ["Cotton Seeds (10kg)", "Mechanical Planter", "Power Sprayer", "Irrigation System"],
+                cost: 14200
+            },
+            growth: {
+                items: ["NPK Fertilizer (45kg)", "Pesticides (6L)", "Power Sprayer", "Labor (4 workers/day)", "Water/Electricity"],
+                cost: 24800
+            },
+            harvest: {
+                items: ["Cotton Harvester", "Storage Facility", "Ginning Equipment", "Transportation"],
+                cost: 22100
+            }
+        },
+        maize: {
+            sowing: {
+                items: ["Maize Seeds (25kg)", "Mechanical Planter", "Tractor Tools", "Irrigation System"],
+                cost: 15600
+            },
+            growth: {
+                items: ["NPK Fertilizer (60kg)", "Pesticides (5L)", "Power Sprayer", "Labor (4 workers/day)", "Electricity/Diesel"],
+                cost: 26200
+            },
+            harvest: {
+                items: ["Combine Harvester", "Storage Silos", "Dryer Equipment", "Transportation"],
+                cost: 17800
+            }
+        }
+    }
+};
+
+document.getElementById('calendarForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const farmerSize = document.getElementById('farmerSize').value;
+    const crop = document.getElementById('crop').value;
+    const landSize = parseFloat(document.getElementById('landSize').value);
+
+    if (farmerSize && crop && calendarData[farmerSize] && calendarData[farmerSize][crop]) {
+        displayCalendar(farmerSize, crop, landSize);
+    }
+});
+
+function displayCalendar(farmerSize, crop, landSize) {
+    const data = calendarData[farmerSize][crop];
+    const totalCost = (data.sowing.cost + data.growth.cost + data.harvest.cost) * landSize;
+
+    document.getElementById('calendarTitle').textContent = `${farmerSize.charAt(0).toUpperCase() + farmerSize.slice(1)} Farmer - ${crop.charAt(0).toUpperCase() + crop.slice(1)} (${landSize} acre${landSize > 1 ? 's' : ''})`;
+    document.getElementById('totalCost').textContent = totalCost.toLocaleString();
+
+    const phasesHtml = `
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-header bg-success text-white">Sowing Phase</div>
+                    <div class="card-body">
+                        <h6>Items Needed:</h6>
+                        <ul class="list-group list-group-flush">
+                            ${data.sowing.items.map(item => `<li class="list-group-item">${item}</li>`).join('')}
+                        </ul>
+                        <p class="mt-2"><strong>Estimated Cost: ₹${(data.sowing.cost * landSize).toLocaleString()}</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-header bg-warning text-dark">Growth Phase</div>
+                    <div class="card-body">
+                        <h6>Daily/Weekly Needs:</h6>
+                        <ul class="list-group list-group-flush">
+                            ${data.growth.items.map(item => `<li class="list-group-item">${item}</li>`).join('')}
+                        </ul>
+                        <p class="mt-2"><strong>Estimated Cost: ₹${(data.growth.cost * landSize).toLocaleString()}</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-header bg-info text-white">Harvest Phase</div>
+                    <div class="card-body">
+                        <h6>Tools & Storage:</h6>
+                        <ul class="list-group list-group-flush">
+                            ${data.harvest.items.map(item => `<li class="list-group-item">${item}</li>`).join('')}
+                        </ul>
+                        <p class="mt-2"><strong>Estimated Cost: ₹${(data.harvest.cost * landSize).toLocaleString()}</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('phasesContainer').innerHTML = phasesHtml;
+    document.getElementById('calendarDisplay').style.display = 'block';
+}
+</script>
+{% endblock %}

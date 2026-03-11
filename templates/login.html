@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-container" style="max-width: 500px; margin: 50px auto;">
+    <div class="text-center mb-4">
+        <img src="{{ url_for('static', filename='krishak_logo.png') }}" alt="Krishak Logo" style="height: 60px; margin-bottom: 15px;">
+        <h2 style="color: var(--primary-brown);">Welcome Back</h2>
+        <p>Sign in to your account</p>
+    </div>
+
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+        <button type="submit" class="btn-primary w-100" style="padding: 12px; font-size: 16px; margin-top: 10px;">Login</button>
+    </form>
+
+    <div class="text-center mt-4" style="border-top: 1px solid #eee; padding-top: 20px;">
+        <p style="margin-bottom: 15px;">or</p>
+        <a href="{{ url_for('google_login') }}" class="btn-google w-100" style="display: inline-block; padding: 10px; text-align: center; border: 1px solid #ddd; border-radius: 4px; color: #333;">
+<img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" style="width: 18px; height: 18px; margin-right: 10px; vertical-align: middle;">
+            Continue with Google
+        </a>
+    </div>
+
+    <div class="text-center mt-4">
+        <p>New User? <a href="{{ url_for('signup') }}" style="color: var(--primary-green); font-weight: 600;">Register here</a></p>
+    </div>
+
+    <div id="message" class="message" style="margin-top: 15px; padding: 10px; display: none;"></div>
+</div>
+{% endblock %}

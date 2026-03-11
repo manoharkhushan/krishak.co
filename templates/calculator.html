@@ -1,0 +1,1327 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="section-title">Farmer Calculator Tools</h2>
+    <p class="mb-4">Essential calculators for farmers to plan and manage their agricultural activities</p>
+    
+    <!-- Calculator Tabs -->
+    <ul class="nav nav-tabs mb-4" id="calculatorTabs" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link active" id="yield-tab" data-bs-toggle="tab" data-bs-target="#yield" type="button">Crop Yield</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="fertilizer-tab" data-bs-toggle="tab" data-bs-target="#fertilizer" type="button">Fertilizer (NPK)</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="cost-tab" data-bs-toggle="tab" data-bs-target="#cost" type="button">Cost of Cultivation</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="seed-tab" data-bs-toggle="tab" data-bs-target="#seed" type="button">Seed Rate</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="irrigation-tab" data-bs-toggle="tab" data-bs-target="#irrigation" type="button">Irrigation</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="profit-tab" data-bs-toggle="tab" data-bs-target="#profit" type="button">Profit/Loss</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="insurance-tab" data-bs-toggle="tab" data-bs-target="#insurance" type="button">Crop Insurance</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="loan-tab" data-bs-toggle="tab" data-bs-target="#loan" type="button">Loan EMI</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="harvest-tab" data-bs-toggle="tab" data-bs-target="#harvest" type="button">Harvesting</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="transport-tab" data-bs-toggle="tab" data-bs-target="#transport" type="button">Transport</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="labor-tab" data-bs-toggle="tab" data-bs-target="#labor" type="button">Labor</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="storage-tab" data-bs-toggle="tab" data-bs-target="#storage" type="button">Storage</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="pesticide-tab" data-bs-toggle="tab" data-bs-target="#pesticide" type="button">Pesticide</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="milk-tab" data-bs-toggle="tab" data-bs-target="#milk" type="button">Milk Production</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="calculatorTabContent">
+        
+        <!-- Crop Yield Calculator -->
+        <div class="tab-pane fade show active" id="yield" role="tabpanel">
+            <div class="form-container">
+                <h3>Crop Yield Calculator</h3>
+                <p>Estimate your expected crop yield based on area and historical data</p>
+                <form id="yieldForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="yieldCrop">Select Crop</label>
+                                <select id="yieldCrop" class="form-control">
+                                    <option value="wheat">Wheat</option>
+                                    <option value="rice">Rice</option>
+                                    <option value="cotton">Cotton</option>
+                                    <option value="sugarcane">Sugarcane</option>
+                                    <option value="maize">Maize</option>
+                                    <option value="soybean">Soybean</option>
+                                    <option value="potato">Potato</option>
+                                    <option value="onion">Onion</option>
+                                    <option value="tomato">Tomato</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="yieldArea">Area (Acres)</label>
+                                <input type="number" id="yieldArea" class="form-control" placeholder="Enter area in acres" min="0" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="yieldPerAcre">Expected Yield per Acre (Quintals)</label>
+                                <input type="number" id="yieldPerAcre" class="form-control" placeholder="Enter expected yield per acre" min="0" step="0.1">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="yieldPrice">Current Market Price (₹/Quintal)</label>
+                                <input type="number" id="yieldPrice" class="form-control" placeholder="Enter market price" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="calculateYield()">Calculate Yield</button>
+                    <div id="yieldResult" class="mt-3 result-box" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Fertilizer Calculator -->
+        <div class="tab-pane fade" id="fertilizer" role="tabpanel">
+            <div class="form-container">
+                <h3>Fertilizer (NPK) Calculator</h3>
+                <p>Calculate the right amount of NPK fertilizers for your crop</p>
+                <form id="fertilizerForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="fertCrop">Select Crop</label>
+                                <select id="fertCrop" class="form-control">
+                                    <option value="wheat">Wheat</option>
+                                    <option value="rice">Rice</option>
+                                    <option value="cotton">Cotton</option>
+                                    <option value="sugarcane">Sugarcane</option>
+                                    <option value="maize">Maize</option>
+                                    <option value="soybean">Soybean</option>
+                                    <option value="potato">Potato</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="fertArea">Area (Acres)</label>
+                                <input type="number" id="fertArea" class="form-control" placeholder="Enter area in acres" min="0" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="fertN">Nitrogen (N) - kg/acre</label>
+                                <input type="number" id="fertN" class="form-control" placeholder="Nitrogen requirement" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="fertP">Phosphorus (P) - kg/acre</label>
+                                <input type="number" id="fertP" class="form-control" placeholder="Phosphorus requirement" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="fertK">Potassium (K) - kg/acre</label>
+                                <input type="number" id="fertK" class="form-control" placeholder="Potassium requirement" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="calculateFertilizer()">Calculate Fertilizer</button>
+                    <div id="fertilizerResult" class="mt-3 result-box" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Cost of Cultivation Calculator -->
+        <div class="tab-pane fade" id="cost" role="tabpanel">
+            <div class="form-container">
+                <h3>Cost of Cultivation Calculator</h3>
+                <p>Calculate total cost involved in cultivating your crops</p>
+                <form id="costForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="costCrop">Select Crop</label>
+                                <select id="costCrop" class="form-control">
+                                    <option value="wheat">Wheat</option>
+                                    <option value="rice">Rice</option>
+                                    <option value="cotton">Cotton</option>
+                                    <option value="sugarcane">Sugarcane</option>
+                                    <option value="maize">Maize</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="costArea">Area (Acres)</label>
+                                <input type="number" id="costArea" class="form-control" placeholder="Enter area in acres" min="0" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="costSeeds">Seeds Cost (₹)</label>
+                                <input type="number" id="costSeeds" class="form-control" placeholder="Cost of seeds" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="costFertilizer">Fertilizer Cost (₹)</label>
+                                <input type="number" id="costFertilizer" class="form-control" placeholder="Cost of fertilizers" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="costPesticides">Pesticides Cost (₹)</label>
+                                <input type="number" id="costPesticides" class="form-control" placeholder="Cost of pesticides" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="costLabor">Labor Cost (₹)</label>
+                                <input type="number" id="costLabor" class="form-control" placeholder="Cost of labor" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="costIrrigation">Irrigation Cost (₹)</label>
+                                <input type="number" id="costIrrigation" class="form-control" placeholder="Cost of irrigation" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="costOther">Other Costs (₹)</label>
+                                <input type="number" id="costOther" class="form-control" placeholder="Miscellaneous costs" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="calculateCost()">Calculate Total Cost</button>
+                    <div id="costResult" class="mt-3 result-box" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Seed Rate Calculator -->
+        <div class="tab-pane fade" id="seed" role="tabpanel">
+            <div class="form-container">
+                <h3>Seed Rate Calculator</h3>
+                <p>Calculate the required seed quantity for your field</p>
+                <form id="seedForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="seedCrop">Select Crop</label>
+                                <select id="seedCrop" class="form-control">
+                                    <option value="wheat">Wheat</option>
+                                    <option value="rice">Rice</option>
+                                    <option value="cotton">Cotton</option>
+                                    <option value="maize">Maize</option>
+                                    <option value="soybean">Soybean</option>
+                                    <option value="potato">Potato</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="seedArea">Area (Acres)</label>
+                                <input type="number" id="seedArea" class="form-control" placeholder="Enter area in acres" min="0" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="seedRate">Seed Rate (kg/acre)</label>
+                                <input type="number" id="seedRate" class="form-control" placeholder="Enter seed rate per acre" min="0" step="0.1">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="seedPrice">Seed Price (₹/kg)</label>
+                                <input type="number" id="seedPrice" class="form-control" placeholder="Enter price per kg" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="calculateSeed()">Calculate Seeds</button>
+                    <div id="seedResult" class="mt-3 result-box" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Irrigation Calculator -->
+        <div class="tab-pane fade" id="irrigation" role="tabpanel">
+            <div class="form-container">
+                <h3>Irrigation/Water Requirement Calculator</h3>
+                <p>Calculate water requirements for your crops</p>
+                <form id="irrigationForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="irrCrop">Select Crop</label>
+                                <select id="irrCrop" class="form-control">
+                                    <option value="wheat">Wheat</option>
+                                    <option value="rice">Rice</option>
+                                    <option value="cotton">Cotton</option>
+                                    <option value="sugarcane">Sugarcane</option>
+                                    <option value="maize">Maize</option>
+                                    <option value="vegetables">Vegetables</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="irrArea">Area (Acres)</label>
+                                <input type="number" id="irrArea" class="form-control" placeholder="Enter area in acres" min="0" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="irrDays">Growing Period (Days)</label>
+                                <input type="number" id="irrDays" class="form-control" placeholder="Crop growing period" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="irrMethod">Irrigation Method</label>
+                                <select id="irrMethod" class="form-control">
+                                    <option value="flood">Flood Irrigation</option>
+                                    <option value="drip">Drip Irrigation</option>
+                                    <option value="sprinkler">Sprinkler Irrigation</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="calculateIrrigation()">Calculate Water Requirement</button>
+                    <div id="irrigationResult" class="mt-3 result-box" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Profit/Loss Calculator -->
+        <div class="tab-pane fade" id="profit" role="tabpanel">
+            <div class="form-container">
+                <h3>Profit/Loss Calculator</h3>
+                <p>Calculate your expected profit or loss from crop cultivation</p>
+                <form id="profitForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="profitCrop">Select Crop</label>
+                                <select id="profitCrop" class="form-control">
+                                    <option value="wheat">Wheat</option>
+                                    <option value="rice">Rice</option>
+                                    <option value="cotton">Cotton</option>
+                                    <option value="sugarcane">Sugarcane</option>
+                                    <option value="maize">Maize</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="profitArea">Area (Acres)</label>
+                                <input type="number" id="profitArea" class="form-control" placeholder="Enter area in acres" min="0" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="profitYield">Total Yield (Quintals)</label>
+                                <input type="number" id="profitYield" class="form-control" placeholder="Total yield from field" min="0" step="0.1">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="profitPrice">Selling Price (₹/Quintal)</label>
+                                <input type="number" id="profitPrice" class="form-control" placeholder="Price per quintal" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="profitCost">Total Cultivation Cost (₹)</label>
+                                <input type="number" id="profitCost" class="form-control" placeholder="Total cost of cultivation" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="calculateProfit()">Calculate Profit/Loss</button>
+                    <div id="profitResult" class="mt-3 result-box" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Crop Insurance Calculator -->
+        <div class="tab-pane fade" id="insurance" role="tabpanel">
+            <div class="form-container">
+                <h3>Crop Insurance Calculator</h3>
+                <p>Estimate crop insurance premium and coverage</p>
+                <form id="insuranceForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="insCrop">Select Crop</label>
+                                <select id="insCrop" class="form-control">
+                                    <option value="wheat">Wheat</option>
+                                    <option value="rice">Rice</option>
+                                    <option value="cotton">Cotton</option>
+                                    <option value="sugarcane">Sugarcane</option>
+                                    <option value="maize">Maize</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="insArea">Area (Acres)</label>
+                                <input type="number" id="insArea" class="form-control" placeholder="Enter area in acres" min="0" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="insSum">Sum Insured (₹/acre)</label>
+                                <input type="number" id="insSum" class="form-control" placeholder="Sum insured per acre" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="insPremium">Premium Rate (%)</label>
+                                <input type="number" id="insPremium" class="form-control" placeholder="Premium rate (usually 2%)" min="0" step="0.1" value="2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="insScheme">Insurance Scheme</label>
+                                <select id="insScheme" class="form-control">
+                                    <option value="pmfby">PMFBY (Pradhan Mantri Fasal Bima Yojana)</option>
+                                    <option value="rwbcis">RWBCIS (Restructured Weather Based Crop Insurance Scheme)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="calculateInsurance()">Calculate Premium</button>
+                    <div id="insuranceResult" class="mt-3 result-box" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Loan EMI Calculator -->
+        <div class="tab-pane fade" id="loan" role="tabpanel">
+            <div class="form-container">
+                <h3>Loan EMI Calculator</h3>
+                <p>Calculate EMI for agricultural loans</p>
+                <form id="loanForm">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="loanType">Loan Type</label>
+                                <select id="loanType" class="form-control">
+                                    <option value="crop">Crop Loan / KCC</option>
+                                    <option value="term">Term Loan (Equipment/Investment)</option>
+                                    <option value="warehouse">Warehouse Receipt Finance</option>
+                                    <option value="housing">Farm House Construction</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="loanAmount">Loan Amount (₹)</label>
+                                <input type="number" id="loanAmount" class="form-control" placeholder="Principal amount" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="loanRate">Interest Rate (% p.a.)</label>
+                                <input type="number" id="loanRate" class="form-control" placeholder="Interest rate" min="0" step="0.1" value="7">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="loanTenure">Tenure (Months)</label>
+                                <input type="number" id="loanTenure" class="form-control" placeholder="Loan tenure in months" min="1">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="calculateLoan()">Calculate EMI</button>
+                    <div id="loanResult" class="mt-3 result-box" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Harvesting Cost Calculator -->
+        <div class="tab-pane fade" id="harvest" role="tabpanel">
+            <div class="form-container">
+                <h3>Harvesting Cost Calculator</h3>
+                <p>Calculate harvesting and post-harvest costs</p>
+                <form id="harvestForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="harvestCrop">Select Crop</label>
+                                <select id="harvestCrop" class="form-control">
+                                    <option value="wheat">Wheat</option>
+                                    <option value="rice">Rice</option>
+                                    <option value="cotton">Cotton</option>
+                                    <option value="sugarcane">Sugarcane</option>
+                                    <option value="maize">Maize</option>
+                                    <option value="soybean">Soybean</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="harvestArea">Area (Acres)</label>
+                                <input type="number" id="harvestArea" class="form-control" placeholder="Enter area in acres" min="0" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="harvestMachine">Machine Cost (₹/acre)</label>
+                                <input type="number" id="harvestMachine" class="form-control" placeholder="Harvesting machine cost" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="harvestLabor">Labor Cost (₹)</label>
+                                <input type="number" id="harvestLabor" class="form-control" placeholder="Labor for harvesting" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="harvestTransport">Transport to Mandi (₹)</label>
+                                <input type="number" id="harvestTransport" class="form-control" placeholder="Transportation cost" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="harvestLoading">Loading/Unloading (₹)</label>
+                                <input type="number" id="harvestLoading" class="form-control" placeholder="Loading charges" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="harvestCommission">Mandi Commission (%)</label>
+                                <input type="number" id="harvestCommission" class="form-control" placeholder="Usually 2-6%" min="0" step="0.1" value="4">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="harvestOther">Other Costs (₹)</label>
+                                <input type="number" id="harvestOther" class="form-control" placeholder="Miscellaneous" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="calculateHarvest()">Calculate Harvesting Cost</button>
+                    <div id="harvestResult" class="mt-3 result-box" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Transportation Cost Calculator -->
+        <div class="tab-pane fade" id="transport" role="tabpanel">
+            <div class="form-container">
+                <h3>Transportation Cost Calculator</h3>
+                <p>Calculate transportation costs for moving produce to market</p>
+                <form id="transportForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="transportCrop">Produce Type</label>
+                                <select id="transportCrop" class="form-control">
+                                    <option value="grains">Grains (Wheat, Rice, Maize)</option>
+                                    <option value="cotton">Cotton</option>
+                                    <option value="sugarcane">Sugarcane</option>
+                                    <option value="vegetables">Vegetables</option>
+                                    <option value="fruits">Fruits</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="transportQuantity">Quantity (Quintals)</label>
+                                <input type="number" id="transportQuantity" class="form-control" placeholder="Total produce in quintals" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="transportDistance">Distance to Market (km)</label>
+                                <input type="number" id="transportDistance" class="form-control" placeholder="Distance in kilometers" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="transportRate">Rate per km (₹)</label>
+                                <input type="number" id="transportRate" class="form-control" placeholder="Transport rate per km" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="transportVehicle">Vehicle Type</label>
+                                <select id="transportVehicle" class="form-control">
+                                    <option value="tractor">Tractor with Trolley</option>
+                                    <option value="pickup">Pickup Van</option>
+                                    <option value="truck">Small Truck</option>
+                                    <option value="largeTruck">Large Truck</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="calculateTransport()">Calculate Transport Cost</button>
+                    <div id="transportResult" class="mt-3 result-box" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Labor Requirement Calculator -->
+        <div class="tab-pane fade" id="labor" role="tabpanel">
+            <div class="form-container">
+                <h3>Labor Requirement Calculator</h3>
+                <p>Estimate labor requirements for different farm operations</p>
+                <form id="laborForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="laborCrop">Select Crop</label>
+                                <select id="laborCrop" class="form-control">
+                                    <option value="wheat">Wheat</option>
+                                    <option value="rice">Rice</option>
+                                    <option value="cotton">Cotton</option>
+                                    <option value="sugarcane">Sugarcane</option>
+                                    <option value="maize">Maize</option>
+                                    <option value="vegetables">Vegetables</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="laborArea">Area (Acres)</label>
+                                <input type="number" id="laborArea" class="form-control" placeholder="Enter area in acres" min="0" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="laborWage">Daily Wage Rate (₹/day)</label>
+                                <input type="number" id="laborWage" class="form-control" placeholder="Labor wage per day" min="0" value="300">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="laborOperation">Farm Operation</label>
+                                <select id="laborOperation" class="form-control">
+                                    <option value="all">All Operations</option>
+                                    <option value="plowing">Plowing/Field Preparation</option>
+                                    <option value="sowing">Sowing/Planting</option>
+                                    <option value="weeding">Weeding</option>
+                                    <option value="fertilizer">Fertilizer Application</option>
+                                    <option value="irrigation">Irrigation</option>
+                                    <option value="harvesting">Harvesting</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="calculateLabor()">Calculate Labor Requirement</button>
+                    <div id="laborResult" class="mt-3 result-box" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Storage Cost Calculator -->
+        <div class="tab-pane fade" id="storage" role="tabpanel">
+            <div class="form-container">
+                <h3>Storage Cost Calculator</h3>
+                <p>Calculate storage costs for your produce</p>
+                <form id="storageForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="storageCrop">Produce Type</label>
+                                <select id="storageCrop" class="form-control">
+                                    <option value="wheat">Wheat</option>
+                                    <option value="rice">Rice</option>
+                                    <option value="cotton">Cotton</option>
+                                    <option value="maize">Maize</option>
+                                    <option value="soybean">Soybean</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="storageQuantity">Quantity (Quintals)</label>
+                                <input type="number" id="storageQuantity" class="form-control" placeholder="Quantity to store" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="storageDays">Storage Period (Days)</label>
+                                <input type="number" id="storageDays" class="form-control" placeholder="Days to store" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="storageRate">Storage Rate (₹/quintal/month)</label>
+                                <input type="number" id="storageRate" class="form-control" placeholder="Monthly storage rate" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="storageType">Storage Type</label>
+                                <select id="storageType" class="form-control">
+                                    <option value="warehouse">Govt. Warehouse (CWC)</option>
+                                    <option value="cold">Cold Storage</option>
+                                    <option value="custom">Custom Hiring</option>
+                                    <option value="farm">On-farm Storage</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="calculateStorage()">Calculate Storage Cost</button>
+                    <div id="storageResult" class="mt-3 result-box" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Pesticide Calculator -->
+        <div class="tab-pane fade" id="pesticide" role="tabpanel">
+            <div class="form-container">
+                <h3>Pesticide/Calculator</h3>
+                <p>Calculate pesticide requirements and costs</p>
+                <form id="pesticideForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="pestCrop">Select Crop</label>
+                                <select id="pestCrop" class="form-control">
+                                    <option value="wheat">Wheat</option>
+                                    <option value="rice">Rice</option>
+                                    <option value="cotton">Cotton</option>
+                                    <option value="sugarcane">Sugarcane</option>
+                                    <option value="maize">Maize</option>
+                                    <option value="vegetables">Vegetables</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="pestArea">Area (Acres)</label>
+                                <input type="number" id="pestArea" class="form-control" placeholder="Enter area in acres" min="0" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="pestType">Pest Attack Level</label>
+                                <select id="pestType" class="form-control">
+                                    <option value="low">Low (Preventive)</option>
+                                    <option value="medium">Medium (Curative)</option>
+                                    <option value="high">High (Intensive)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="pestDosage">Dosage (ml or gm/acre)</label>
+                                <input type="number" id="pestDosage" class="form-control" placeholder="Pesticide dosage per acre" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="pestPrice">Pesticide Price (₹)</label>
+                                <input type="number" id="pestPrice" class="form-control" placeholder="Price per liter/kg" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="calculatePesticide()">Calculate Pesticide Cost</button>
+                    <div id="pesticideResult" class="mt-3 result-box" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Milk Production Calculator -->
+        <div class="tab-pane fade" id="milk" role="tabpanel">
+            <div class="form-container">
+                <h3>Milk Production Calculator</h3>
+                <p>Calculate milk production costs and profits</p>
+                <form id="milkForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="milkAnimal">Animal Type</label>
+                                <select id="milkAnimal" class="form-control">
+                                    <option value="cow">Cow (Indigenous)</option>
+                                    <option value="cow_hf">Cow (HF Crossbred)</option>
+                                    <option value="buffalo">Buffalo</option>
+                                    <option value="goat">Goat</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="milkAnimals">Number of Animals</label>
+                                <input type="number" id="milkAnimals" class="form-control" placeholder="Number of animals" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="milkPerDay">Milk per Animal (liters/day)</label>
+                                <input type="number" id="milkPerDay" class="form-control" placeholder="Daily milk yield per animal" min="0" step="0.1">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="milkPrice">Milk Price (₹/liter)</label>
+                                <input type="number" id="milkPrice" class="form-control" placeholder="Selling price per liter" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="milkFat">Fat Content (%)</label>
+                                <input type="number" id="milkFat" class="form-control" placeholder="Fat percentage" min="0" step="0.1" value="4.5">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="milkFeed">Feed Cost per Animal (₹/day)</label>
+                                <input type="number" id="milkFeed" class="form-control" placeholder="Daily feed cost" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="milkOther">Other Costs per Animal (₹/day)</label>
+                                <input type="number" id="milkOther" class="form-control" placeholder="Labor, veterinary, etc." min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="calculateMilk()">Calculate Milk Production</button>
+                    <div id="milkResult" class="mt-3 result-box" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .form-container {
+        background: #fff;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    .form-container h3 {
+        color: var(--primary-green);
+        margin-bottom: 10px;
+    }
+    .form-container p {
+        color: #666;
+        margin-bottom: 20px;
+    }
+    .result-box {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 5px;
+        border-left: 4px solid var(--primary-green);
+    }
+    .result-box h4 {
+        color: var(--primary-green);
+        margin-bottom: 15px;
+    }
+    .result-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+    }
+    .result-item:last-child {
+        border-bottom: none;
+    }
+    .result-value {
+        font-weight: bold;
+        color: var(--primary-brown);
+    }
+    .profit-positive {
+        color: green;
+    }
+    .profit-negative {
+        color: red;
+    }
+    .nav-tabs .nav-link {
+        color: var(--primary-brown);
+        font-weight: 600;
+    }
+    .nav-tabs .nav-link.active {
+        background-color: var(--primary-green);
+        color: white;
+    }
+</style>
+
+<script>
+    // Crop Yield Data (average yields in quintals per acre)
+    const cropYields = {
+        wheat: 15,
+        rice: 20,
+        cotton: 8,
+        sugarcane: 350,
+        maize: 25,
+        soybean: 8,
+        potato: 80,
+        onion: 60,
+        tomato: 100
+    };
+
+    // Crop NPK Requirements (kg per acre)
+    const cropNPK = {
+        wheat: {n: 60, p: 40, k: 20},
+        rice: {n: 80, p: 40, k: 40},
+        cotton: {n: 60, p: 30, k: 30},
+        sugarcane: {n: 150, p: 60, k: 60},
+        maize: {n: 80, p: 40, k: 20},
+        soybean: {n: 20, p: 60, k: 20},
+        potato: {n: 100, p: 50, k: 100}
+    };
+
+    // Crop Water Requirements (mm per acre)
+    const cropWater = {
+        wheat: 450,
+        rice: 1200,
+        cotton: 700,
+        sugarcane: 1500,
+        maize: 500,
+        vegetables: 600
+    };
+
+    // Labor requirements (man-days per acre)
+    const laborRequirements = {
+        wheat: {plowing: 2, sowing: 3, weeding: 8, fertilizer: 2, irrigation: 5, harvesting: 8, total: 28},
+        rice: {plowing: 3, sowing: 5, weeding: 15, fertilizer: 3, irrigation: 10, harvesting: 12, total: 48},
+        cotton: {plowing: 2, sowing: 3, weeding: 20, fertilizer: 3, irrigation: 8, harvesting: 15, total: 51},
+        sugarcane: {plowing: 3, sowing: 8, weeding: 25, fertilizer: 4, irrigation: 10, harvesting: 20, total: 70},
+        maize: {plowing: 2, sowing: 3, weeding: 10, fertilizer: 2, irrigation: 6, harvesting: 8, total: 31},
+        vegetables: {plowing: 3, sowing: 8, weeding: 20, fertilizer: 5, irrigation: 15, harvesting: 15, total: 66}
+    };
+
+    // Vehicle capacity (quintals)
+    const vehicleCapacity = {
+        tractor: 25,
+        pickup: 15,
+        truck: 100,
+        largeTruck: 250
+    };
+
+    function calculateYield() {
+        const crop = document.getElementById('yieldCrop').value;
+        const area = parseFloat(document.getElementById('yieldArea').value) || 0;
+        const perAcre = parseFloat(document.getElementById('yieldPerAcre').value) || cropYields[crop];
+        const price = parseFloat(document.getElementById('yieldPrice').value) || 0;
+        
+        const totalYield = area * perAcre;
+        const totalRevenue = totalYield * price;
+        
+        let resultHTML = '<h4>Yield Calculation Results</h4>';
+        resultHTML += '<div class="result-item"><span>Total Area:</span><span class="result-value">' + area + ' acres</span></div>';
+        resultHTML += '<div class="result-item"><span>Expected Yield per Acre:</span><span class="result-value">' + perAcre + ' quintals</span></div>';
+        resultHTML += '<div class="result-item"><span>Total Yield:</span><span class="result-value">' + totalYield.toFixed(2) + ' quintals</span></div>';
+        if (price > 0) {
+            resultHTML += '<div class="result-item"><span>Expected Revenue:</span><span class="result-value">₹' + totalRevenue.toLocaleString() + '</span></div>';
+        }
+        
+        const resultDiv = document.getElementById('yieldResult');
+        resultDiv.innerHTML = resultHTML;
+        resultDiv.style.display = 'block';
+    }
+
+    function calculateFertilizer() {
+        const crop = document.getElementById('fertCrop').value;
+        const area = parseFloat(document.getElementById('fertArea').value) || 0;
+        const n = parseFloat(document.getElementById('fertN').value) || cropNPK[crop].n;
+        const p = parseFloat(document.getElementById('fertP').value) || cropNPK[crop].p;
+        const k = parseFloat(document.getElementById('fertK').value) || cropNPK[crop].k;
+        
+        const totalN = area * n;
+        const totalP = area * p;
+        const totalK = area * k;
+        
+        // Urea (46% N), DAP (18% N, 46% P2O5), MOP (60% K2O)
+        const ureaRequired = (totalN / 46) * 100;
+        const dapRequired = (totalP / 46) * 100;
+        const mopRequired = (totalK / 60) * 100;
+        
+        let resultHTML = '<h4>Fertilizer Requirements</h4>';
+        resultHTML += '<div class="result-item"><span>Nitrogen (N):</span><span class="result-value">' + totalN.toFixed(2) + ' kg</span></div>';
+        resultHTML += '<div class="result-item"><span>Phosphorus (P):</span><span class="result-value">' + totalP.toFixed(2) + ' kg</span></div>';
+        resultHTML += '<div class="result-item"><span>Potassium (K):</span><span class="result-value">' + totalK.toFixed(2) + ' kg</span></div>';
+        resultHTML += '<hr><h5>Fertilizer Quantities Needed:</h5>';
+        resultHTML += '<div class="result-item"><span>Urea (46% N):</span><span class="result-value">' + ureaRequired.toFixed(2) + ' kg</span></div>';
+        resultHTML += '<div class="result-item"><span>DAP (46% P):</span><span class="result-value">' + dapRequired.toFixed(2) + ' kg</span></div>';
+        resultHTML += '<div class="result-item"><span>MOP (60% K):</span><span class="result-value">' + mopRequired.toFixed(2) + ' kg</span></div>';
+        
+        const resultDiv = document.getElementById('fertilizerResult');
+        resultDiv.innerHTML = resultHTML;
+        resultDiv.style.display = 'block';
+    }
+
+    function calculateCost() {
+        const seeds = parseFloat(document.getElementById('costSeeds').value) || 0;
+        const fertilizer = parseFloat(document.getElementById('costFertilizer').value) || 0;
+        const pesticides = parseFloat(document.getElementById('costPesticides').value) || 0;
+        const labor = parseFloat(document.getElementById('costLabor').value) || 0;
+        const irrigation = parseFloat(document.getElementById('costIrrigation').value) || 0;
+        const other = parseFloat(document.getElementById('costOther').value) || 0;
+        
+        const totalCost = seeds + fertilizer + pesticides + labor + irrigation + other;
+        const area = parseFloat(document.getElementById('costArea').value) || 1;
+        const costPerAcre = totalCost / area;
+        
+        let resultHTML = '<h4>Cost of Cultivation</h4>';
+        resultHTML += '<div class="result-item"><span>Seeds Cost:</span><span class="result-value">₹' + seeds.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Fertilizer Cost:</span><span class="result-value">₹' + fertilizer.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Pesticides Cost:</span><span class="result-value">₹' + pesticides.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Labor Cost:</span><span class="result-value">₹' + labor.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Irrigation Cost:</span><span class="result-value">₹' + irrigation.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Other Costs:</span><span class="result-value">₹' + other.toLocaleString() + '</span></div>';
+        resultHTML += '<hr><div class="result-item"><span>Total Cost:</span><span class="result-value">₹' + totalCost.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Cost per Acre:</span><span class="result-value">₹' + costPerAcre.toLocaleString() + '/acre</span></div>';
+        
+        const resultDiv = document.getElementById('costResult');
+        resultDiv.innerHTML = resultHTML;
+        resultDiv.style.display = 'block';
+    }
+
+    function calculateSeed() {
+        const area = parseFloat(document.getElementById('seedArea').value) || 0;
+        const seedRate = parseFloat(document.getElementById('seedRate').value) || 0;
+        const price = parseFloat(document.getElementById('seedPrice').value) || 0;
+        
+        const totalSeeds = area * seedRate;
+        const totalCost = totalSeeds * price;
+        
+        let resultHTML = '<h4>Seed Requirement</h4>';
+        resultHTML += '<div class="result-item"><span>Area:</span><span class="result-value">' + area + ' acres</span></div>';
+        resultHTML += '<div class="result-item"><span>Seed Rate:</span><span class="result-value">' + seedRate + ' kg/acre</span></div>';
+        resultHTML += '<div class="result-item"><span>Total Seeds Required:</span><span class="result-value">' + totalSeeds.toFixed(2) + ' kg</span></div>';
+        if (price > 0) {
+            resultHTML += '<div class="result-item"><span>Total Cost:</span><span class="result-value">₹' + totalCost.toLocaleString() + '</span></div>';
+        }
+        
+        const resultDiv = document.getElementById('seedResult');
+        resultDiv.innerHTML = resultHTML;
+        resultDiv.style.display = 'block';
+    }
+
+    function calculateIrrigation() {
+        const crop = document.getElementById('irrCrop').value;
+        const area = parseFloat(document.getElementById('irrArea').value) || 0;
+        const days = parseInt(document.getElementById('irrDays').value) || 0;
+        const method = document.getElementById('irrMethod').value;
+        
+        const waterReq = cropWater[crop];
+        let efficiency = 1;
+        if (method === 'drip') efficiency = 0.9;
+        else if (method === 'sprinkler') efficiency = 0.75;
+        
+        const totalWater = (area * waterReq * days / 365) / efficiency;
+        const litersWater = totalWater * 10000;
+        
+        let resultHTML = '<h4>Water Requirement</h4>';
+        resultHTML += '<div class="result-item"><span>Crop:</span><span class="result-value">' + crop.charAt(0).toUpperCase() + crop.slice(1) + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Area:</span><span class="result-value">' + area + ' acres</span></div>';
+        resultHTML += '<div class="result-item"><span>Growing Period:</span><span class="result-value">' + days + ' days</span></div>';
+        resultHTML += '<div class="result-item"><span>Irrigation Method:</span><span class="result-value">' + method.charAt(0).toUpperCase() + method.slice(1) + '</span></div>';
+        resultHTML += '<hr><div class="result-item"><span>Total Water Required:</span><span class="result-value">' + totalWater.toFixed(0) + ' acre-inches</span></div>';
+        resultHTML += '<div class="result-item"><span>Or:</span><span class="result-value">' + (litersWater / 1000000).toFixed(2) + ' million liters</span></div>';
+        
+        const resultDiv = document.getElementById('irrigationResult');
+        resultDiv.innerHTML = resultHTML;
+        resultDiv.style.display = 'block';
+    }
+
+    function calculateProfit() {
+        const yield_ = parseFloat(document.getElementById('profitYield').value) || 0;
+        const price = parseFloat(document.getElementById('profitPrice').value) || 0;
+        const cost = parseFloat(document.getElementById('profitCost').value) || 0;
+        
+        const revenue = yield_ * price;
+        const profit = revenue - cost;
+        const profitPercent = cost > 0 ? (profit / cost) * 100 : 0;
+        
+        let profitClass = profit >= 0 ? 'profit-positive' : 'profit-negative';
+        
+        let resultHTML = '<h4>Profit/Loss Calculation</h4>';
+        resultHTML += '<div class="result-item"><span>Total Yield:</span><span class="result-value">' + yield_.toFixed(2) + ' quintals</span></div>';
+        resultHTML += '<div class="result-item"><span>Selling Price:</span><span class="result-value">₹' + price.toLocaleString() + '/quintal</span></div>';
+        resultHTML += '<div class="result-item"><span>Total Revenue:</span><span class="result-value">₹' + revenue.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Total Cost:</span><span class="result-value">₹' + cost.toLocaleString() + '</span></div>';
+        resultHTML += '<hr><div class="result-item"><span>Net ' + (profit >= 0 ? 'Profit' : 'Loss') + ':</span><span class="result-value ' + profitClass + '">₹' + Math.abs(profit).toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Return on Investment:</span><span class="result-value ' + profitClass + '">' + profitPercent.toFixed(2) + '%</span></div>';
+        
+        const resultDiv = document.getElementById('profitResult');
+        resultDiv.innerHTML = resultHTML;
+        resultDiv.style.display = 'block';
+    }
+
+    function calculateInsurance() {
+        const area = parseFloat(document.getElementById('insArea').value) || 0;
+        const sumInsured = parseFloat(document.getElementById('insSum').value) || 0;
+        const premiumRate = parseFloat(document.getElementById('insPremium').value) || 2;
+        
+        const totalSumInsured = area * sumInsured;
+        const farmerPremium = (totalSumInsured * premiumRate) / 100;
+        const govtSubsidy = totalSumInsured - farmerPremium;
+        
+        let resultHTML = '<h4>Crop Insurance Premium</h4>';
+        resultHTML += '<div class="result-item"><span>Area:</span><span class="result-value">' + area + ' acres</span></div>';
+        resultHTML += '<div class="result-item"><span>Sum Insured per acre:</span><span class="result-value">₹' + sumInsured.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Premium Rate:</span><span class="result-value">' + premiumRate + '%</span></div>';
+        resultHTML += '<hr><div class="result-item"><span>Total Sum Insured:</span><span class="result-value">₹' + totalSumInsured.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Farmer\'s Premium (2%):</span><span class="result-value">₹' + farmerPremium.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Government Subsidy:</span><span class="result-value">₹' + govtSubsidy.toLocaleString() + '</span></div>';
+        
+        const resultDiv = document.getElementById('insuranceResult');
+        resultDiv.innerHTML = resultHTML;
+        resultDiv.style.display = 'block';
+    }
+
+    function calculateLoan() {
+        const principal = parseFloat(document.getElementById('loanAmount').value) || 0;
+        const rate = parseFloat(document.getElementById('loanRate').value) || 7;
+        const tenure = parseInt(document.getElementById('loanTenure').value) || 12;
+        
+        const monthlyRate = rate / 12 / 100;
+        const emi = principal * monthlyRate * Math.pow(1 + monthlyRate, tenure) / (Math.pow(1 + monthlyRate, tenure) - 1);
+        const totalPayment = emi * tenure;
+        const totalInterest = totalPayment - principal;
+        
+        let resultHTML = '<h4>Loan EMI Details</h4>';
+        resultHTML += '<div class="result-item"><span>Principal Amount:</span><span class="result-value">₹' + principal.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Interest Rate:</span><span class="result-value">' + rate + '% p.a.</span></div>';
+        resultHTML += '<div class="result-item"><span>Tenure:</span><span class="result-value">' + tenure + ' months</span></div>';
+        resultHTML += '<hr><div class="result-item"><span>Monthly EMI:</span><span class="result-value">₹' + emi.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Total Interest:</span><span class="result-value">₹' + totalInterest.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Total Payment:</span><span class="result-value">₹' + totalPayment.toLocaleString() + '</span></div>';
+        
+        const resultDiv = document.getElementById('loanResult');
+        resultDiv.innerHTML = resultHTML;
+        resultDiv.style.display = 'block';
+    }
+
+    function calculateHarvest() {
+        const area = parseFloat(document.getElementById('harvestArea').value) || 0;
+        const machineCost = parseFloat(document.getElementById('harvestMachine').value) || 0;
+        const laborCost = parseFloat(document.getElementById('harvestLabor').value) || 0;
+        const transport = parseFloat(document.getElementById('harvestTransport').value) || 0;
+        const loading = parseFloat(document.getElementById('harvestLoading').value) || 0;
+        const commission = parseFloat(document.getElementById('harvestCommission').value) || 4;
+        const other = parseFloat(document.getElementById('harvestOther').value) || 0;
+        
+        const totalMachine = machineCost * area;
+        const subtotal = totalMachine + laborCost + transport + loading + other;
+        const commissionAmount = (subtotal * commission) / 100;
+        const totalCost = subtotal + commissionAmount;
+        
+        let resultHTML = '<h4>Harvesting Cost Breakdown</h4>';
+        resultHTML += '<div class="result-item"><span>Machine Cost:</span><span class="result-value">₹' + totalMachine.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Labor Cost:</span><span class="result-value">₹' + laborCost.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Transport to Mandi:</span><span class="result-value">₹' + transport.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Loading/Unloading:</span><span class="result-value">₹' + loading.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Other Costs:</span><span class="result-value">₹' + other.toLocaleString() + '</span></div>';
+        resultHTML += '<hr><div class="result-item"><span>Mandi Commission (' + commission + '%):</span><span class="result-value">₹' + commissionAmount.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Total Harvesting Cost:</span><span class="result-value">₹' + totalCost.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Cost per Acre:</span><span class="result-value">₹' + (totalCost / area).toLocaleString() + '</span></div>';
+        
+        const resultDiv = document.getElementById('harvestResult');
+        resultDiv.innerHTML = resultHTML;
+        resultDiv.style.display = 'block';
+    }
+
+    function calculateTransport() {
+        const quantity = parseFloat(document.getElementById('transportQuantity').value) || 0;
+        const distance = parseFloat(document.getElementById('transportDistance').value) || 0;
+        const rate = parseFloat(document.getElementById('transportRate').value) || 0;
+        const vehicle = document.getElementById('transportVehicle').value;
+        
+        const capacity = vehicleCapacity[vehicle];
+        const trips = Math.ceil(quantity / capacity);
+        const totalCost = distance * rate * trips;
+        const costPerQuintal = quantity > 0 ? totalCost / quantity : 0;
+        
+        let resultHTML = '<h4>Transportation Cost</h4>';
+        resultHTML += '<div class="result-item"><span>Quantity:</span><span class="result-value">' + quantity + ' quintals</span></div>';
+        resultHTML += '<div class="result-item"><span>Distance:</span><span class="result-value">' + distance + ' km</span></div>';
+        resultHTML += '<div class="result-item"><span>Vehicle Type:</span><span class="result-value">' + vehicle.charAt(0).toUpperCase() + vehicle.slice(1) + ' (' + capacity + ' qtl capacity)</span></div>';
+        resultHTML += '<div class="result-item"><span>Number of Trips:</span><span class="result-value">' + trips + '</span></div>';
+        resultHTML += '<hr><div class="result-item"><span>Total Transport Cost:</span><span class="result-value">₹' + totalCost.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Cost per Quintal:</span><span class="result-value">₹' + costPerQuintal.toFixed(2) + '</span></div>';
+        
+        const resultDiv = document.getElementById('transportResult');
+        resultDiv.innerHTML = resultHTML;
+        resultDiv.style.display = 'block';
+    }
+
+    function calculateLabor() {
+        const crop = document.getElementById('laborCrop').value;
+        const area = parseFloat(document.getElementById('laborArea').value) || 0;
+        const wage = parseFloat(document.getElementById('laborWage').value) || 300;
+        const operation = document.getElementById('laborOperation').value;
+        
+        const laborData = laborRequirements[crop];
+        let laborDays = 0;
+        let operationName = '';
+        
+        if (operation === 'all') {
+            laborDays = laborData.total;
+            operationName = 'All Operations';
+        } else {
+            laborDays = laborData[operation];
+            operationName = operation.charAt(0).toUpperCase() + operation.slice(1);
+        }
+        
+        const totalLaborDays = laborDays * area;
+        const totalCost = totalLaborDays * wage;
+        
+        let resultHTML = '<h4>Labor Requirement</h4>';
+        resultHTML += '<div class="result-item"><span>Crop:</span><span class="result-value">' + crop.charAt(0).toUpperCase() + crop.slice(1) + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Area:</span><span class="result-value">' + area + ' acres</span></div>';
+        resultHTML += '<div class="result-item"><span>Operation:</span><span class="result-value">' + operationName + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Labor per Acre:</span><span class="result-value">' + laborDays + ' man-days</span></div>';
+        resultHTML += '<hr><div class="result-item"><span>Total Labor Required:</span><span class="result-value">' + totalLaborDays + ' man-days</span></div>';
+        resultHTML += '<div class="result-item"><span>Total Labor Cost:</span><span class="result-value">₹' + totalCost.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Cost per Acre:</span><span class="result-value">₹' + (totalCost / area).toLocaleString() + '</span></div>';
+        
+        const resultDiv = document.getElementById('laborResult');
+        resultDiv.innerHTML = resultHTML;
+        resultDiv.style.display = 'block';
+    }
+
+    function calculateStorage() {
+        const quantity = parseFloat(document.getElementById('storageQuantity').value) || 0;
+        const days = parseFloat(document.getElementById('storageDays').value) || 0;
+        const rate = parseFloat(document.getElementById('storageRate').value) || 0;
+        const storageType = document.getElementById('storageType').value;
+        
+        const months = days / 30;
+        const totalCost = quantity * rate * months;
+        
+        let resultHTML = '<h4>Storage Cost Calculation</h4>';
+        resultHTML += '<div class="result-item"><span>Quantity:</span><span class="result-value">' + quantity + ' quintals</span></div>';
+        resultHTML += '<div class="result-item"><span>Storage Period:</span><span class="result-value">' + days + ' days (' + months.toFixed(2) + ' months)</span></div>';
+        resultHTML += '<div class="result-item"><span>Storage Type:</span><span class="result-value">' + storageType.charAt(0).toUpperCase() + storageType.slice(1) + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Rate:</span><span class="result-value">₹' + rate + '/quintal/month</span></div>';
+        resultHTML += '<hr><div class="result-item"><span>Total Storage Cost:</span><span class="result-value">₹' + totalCost.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Cost per Quintal:</span><span class="result-value">₹' + (totalCost / quantity).toFixed(2) + '</span></div>';
+        
+        const resultDiv = document.getElementById('storageResult');
+        resultDiv.innerHTML = resultHTML;
+        resultDiv.style.display = 'block';
+    }
+
+    function calculatePesticide() {
+        const area = parseFloat(document.getElementById('pestArea').value) || 0;
+        const pestType = document.getElementById('pestType').value;
+        const dosage = parseFloat(document.getElementById('pestDosage').value) || 0;
+        const price = parseFloat(document.getElementById('pestPrice').value) || 0;
+        
+        let multiplier = 1;
+        if (pestType === 'medium') multiplier = 1.5;
+        else if (pestType === 'high') multiplier = 2;
+        
+        const totalDosage = area * dosage * multiplier;
+        const totalCost = totalDosage * price;
+        
+        let resultHTML = '<h4>Pesticide Requirement</h4>';
+        resultHTML += '<div class="result-item"><span>Area:</span><span class="result-value">' + area + ' acres</span></div>';
+        resultHTML += '<div class="result-item"><span>Pest Level:</span><span class="result-value">' + pestType.charAt(0).toUpperCase() + pestType.slice(1) + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Base Dosage:</span><span class="result-value">' + dosage + ' ml or gm/acre</span></div>';
+        resultHTML += '<hr><div class="result-item"><span>Total Pesticide Required:</span><span class="result-value">' + totalDosage.toFixed(2) + ' ml or gm</span></div>';
+        if (price > 0) {
+            resultHTML += '<div class="result-item"><span>Total Cost:</span><span class="result-value">₹' + totalCost.toLocaleString() + '</span></div>';
+            resultHTML += '<div class="result-item"><span>Cost per Acre:</span><span class="result-value">₹' + (totalCost / area).toFixed(2) + '</span></div>';
+        }
+        
+        const resultDiv = document.getElementById('pesticideResult');
+        resultDiv.innerHTML = resultHTML;
+        resultDiv.style.display = 'block';
+    }
+
+    function calculateMilk() {
+        const animals = parseInt(document.getElementById('milkAnimals').value) || 0;
+        const milkPerAnimal = parseFloat(document.getElementById('milkPerDay').value) || 0;
+        const price = parseFloat(document.getElementById('milkPrice').value) || 0;
+        const feedCost = parseFloat(document.getElementById('milkFeed').value) || 0;
+        const otherCost = parseFloat(document.getElementById('milkOther').value) || 0;
+        
+        const totalMilk = animals * milkPerAnimal;
+        const dailyRevenue = totalMilk * price;
+        const dailyFeed = animals * feedCost;
+        const dailyOther = animals * otherCost;
+        const dailyCost = dailyFeed + dailyOther;
+        const dailyProfit = dailyRevenue - dailyCost;
+        
+        let resultHTML = '<h4>Milk Production Analysis</h4>';
+        resultHTML += '<div class="result-item"><span>Number of Animals:</span><span class="result-value">' + animals + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Milk per Animal:</span><span class="result-value">' + milkPerAnimal + ' liters/day</span></div>';
+        resultHTML += '<div class="result-item"><span>Total Milk Production:</span><span class="result-value">' + totalMilk + ' liters/day</span></div>';
+        resultHTML += '<div class="result-item"><span>Milk Price:</span><span class="result-value">₹' + price + '/liter</span></div>';
+        resultHTML += '<hr><div class="result-item"><span>Daily Revenue:</span><span class="result-value">₹' + dailyRevenue.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Daily Feed Cost:</span><span class="result-value">₹' + dailyFeed.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Daily Other Costs:</span><span class="result-value">₹' + dailyOther.toLocaleString() + '</span></div>';
+        resultHTML += '<hr><div class="result-item"><span>Daily Total Cost:</span><span class="result-value">₹' + dailyCost.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Net Daily Profit:</span><span class="result-value ' + (dailyProfit >= 0 ? 'profit-positive' : 'profit-negative') + '">₹' + dailyProfit.toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Monthly Profit:</span><span class="result-value ' + (dailyProfit >= 0 ? 'profit-positive' : 'profit-negative') + '">₹' + (dailyProfit * 30).toLocaleString() + '</span></div>';
+        resultHTML += '<div class="result-item"><span>Cost per Liter:</span><span class="result-value">₹' + (dailyCost / totalMilk).toFixed(2) + '</span></div>';
+        
+        const resultDiv = document.getElementById('milkResult');
+        resultDiv.innerHTML = resultHTML;
+        resultDiv.style.display = 'block';
+    }
+</script>
+{% endblock %}

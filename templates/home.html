@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ministry Prototype</title>
+    <style>
+        /* Global Styles & Variables */
+        :root {
+            --primary-green: #006400;
+            --primary-brown: #8b4513;
+            --light-gray: #f4f4f4;
+            --dark-gray: #333;
+            --white: #fff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+        }
+        a { text-decoration: none; color: inherit; transition: color 0.3s; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        h1, h2, h3, p { margin: 0; }
+
+        /* Layout Helpers */
+        .container { width: 92%; max-width: 1200px; margin: 30px auto; }
+        .row { display: flex; flex-wrap: wrap; margin: 0 -15px; }
+        .col { padding: 0 15px; box-sizing: border-box; }
+        .col-6 { width: 50%; }
+        .col-12 { width: 100%; }
+
+        /* Reusable Components */
+        .section-title {
+            color: var(--primary-brown);
+            border-bottom: 2px solid var(--primary-brown);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 1.2em;
+        }
+        .btn-more {
+            background-color: var(--primary-brown);
+            color: var(--white);
+            padding: 6px 12px;
+            font-size: 0.8em;
+            border-radius: 3px;
+        }
+        .btn-more:hover { background-color: #6a3309; }
+        .content-box { background: var(--white); padding: 20px; border: 1px solid #eee; height: 100%; box-sizing: border-box; }
+
+        /* Header Section */
+        header { background-color: var(--white); border-bottom: 1px solid #ddd; }
+        .top-bar {
+            display: flex; justify-content: flex-end; padding: 5px 20px;
+            font-size: 0.8em; background-color: #f9f9f9; color: #666;
+        }
+        .top-bar span { margin-left: 15px; cursor: pointer; }
+        .main-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; height: 60px; }
+        .header-logos img { height: 50px; margin-left: 15px; }
+
+        /* Navigation Bar */
+        nav { background-color: var(--primary-green); color: var(--white); }
+        nav ul { display: flex; padding: 0 20px; }
+        nav ul li { padding: 0; }
+        nav ul li a { display: block; padding: 15px 15px; color: var(--white); font-weight: 600; font-size: 0.9em; }
+        nav ul li a:hover { background-color: rgba(255,255,255,0.1); }
+
+        /* Hero Banner */
+        .hero-banner {
+            height: 350px;
+            background-color: #ccc;
+            background-image: url('https://via.placeholder.com/1200x350/cccccc/000000?text=Event+Banner');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* News Headline Slideshow */
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            background-color: #000;
+        }
+        
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+        
+        .slide.active {
+            opacity: 1;
+        }
+        
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .slide-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+            padding: 60px 40px 30px;
+            box-sizing: border-box;
+        }
+        
+        .slide-headline {
+            color: #fff;
+            font-size: 1.8em;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            margin-bottom: 10px;
+            max-width: 800px;
+        }
+        
+        .slide-date {
+            color: #ffd700;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        
+        .slideshow-dots {
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .dot:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .dot.active {
+            background-color: #ffd700;
+            border-color: #fff;
+            transform: scale(1.2);
+        }
+        
+        .slideshow-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            padding: 15px 10px;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            z-index: 10;
+            border: none;
+        }
+        
+        .slideshow-nav:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        
+        .prev-slide { left: 10px; }
+        .next-slide { right: 10px; }
+
+        /* Organization Text */
+        .org-text p { font-size: 0.95em; line-height: 1.5; color: #555; margin-bottom: 15px; }
+
+        /* News Section */
+        .news-list li { padding: 12px 0; border-bottom: 1px solid #eee; }
+        .news-list li:last-child { border-bottom: none; }
+        .news-list li a { font-size: 0.95em; color: #444; }
+        .news-list li a:hover { color: var(--primary-brown); }
+        .highlight-news { background-color: var(--primary-brown); color: var(--white); padding: 25px; }
+        .highlight-news .section-title { color: var(--white); border-color: var(--white); }
+        .highlight-news h3 { font-size: 1.1em; margin-bottom: 15px; line-height: 1.4; }
+        .highlight-news .download-link { color: #ffd700; text-decoration: underline; margin-bottom: 5px; display: block;}
+        .highlight-news .publish-date { font-size: 0.8em; opacity: 0.8; }
+
+        /* Footer Section */
+        footer { background-color: var(--dark-gray); color: #ccc; padding: 40px 0; text-align: center; }
+        .footer-links a { margin: 0 10px; color: #aaa; font-size: 0.9em; white-space: nowrap; }
+        .footer-links a:hover { color: var(--white); }
+        .contact-info { margin: 25px 0; font-size: 0.95em; }
+        .footer-logos { margin: 25px 0; }
+        .footer-logos img { height: 40px; margin: 0 12px; filter: grayscale(100%); opacity: 0.6; transition: all 0.3s; }
+        .footer-logos img:hover { filter: grayscale(0%); opacity: 1; }
+        .copyright { font-size: 0.8em; color: #888; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="top-bar">
+            <span>HOME</span> | <span>SKIP TO MAIN CONTENT</span> | <span>A- A A+</span> | <span>SCREEN READER ACCESS</span> | <span>CHOOSE LANGUAGE</span>
+        </div>
+        <div class="main-header">
+            <div class="logo-section">
+                </div>
+            <div class="header-logos">
+                </div>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/home">HOME</a></li>
+            <li><a href="/profile">PROFILE</a></li>
+            <li><a href="/crop-requirements">CROP REQUIREMENTS</a></li>
+            <li><a href="/farming-calendar">FARMING CALENDAR</a></li>
+            <li><a href="/mandi-prices">MANDI PRICES</a></li>
+            <li><a href="/schemes">GOVT SCHEMES</a></li>
+            <li><a href="/livestock">LIVESTOCK</a></li>
+            <li><a href="/community">COMMUNITY</a></li>
+            <li><a href="/logout">LOGOUT</a></li>
+        </ul>
+    </nav>
+
+    <!-- News Headline Slideshow -->
+    <section class="slideshow-container" id="newsSlideshow">
+        <!-- Slide 1 -->
+        <div class="slide active">
+            <img src="/static/Slideshow/WhatsApp Image 2026-02-22 at 5.54.14 PM.jpeg" alt="News Slide 1">
+            <div class="slide-overlay">
+                <div class="slide-headline">Cabinet approves continuation of PM-AASHA scheme for farmers' welfare</div>
+                <div class="slide-date">February 27, 2026</div>
+            </div>
+        </div>
+        <!-- Slide 2 -->
+        <div class="slide">
+            <img src="/static/Slideshow/WhatsApp Image 2026-02-22 at 5.54.14 PM (1).jpeg" alt="News Slide 2">
+            <div class="slide-overlay">
+                <div class="slide-headline">New agricultural reforms announced to boost farmer income</div>
+                <div class="slide-date">February 26, 2026</div>
+            </div>
+        </div>
+        <!-- Slide 3 -->
+        <div class="slide">
+            <img src="/static/Slideshow/WhatsApp Image 2026-02-22 at 5.54.15 PM.jpeg" alt="News Slide 3">
+            <div class="slide-overlay">
+                <div class="slide-headline">Minimum Support Prices for Kharif crops announced for 2026 season</div>
+                <div class="slide-date">February 25, 2026</div>
+            </div>
+        </div>
+        <!-- Slide 4 -->
+        <div class="slide">
+            <img src="/static/Slideshow/WhatsApp Image 2026-02-22 at 5.54.15 PM (1).jpeg" alt="News Slide 4">
+            <div class="slide-overlay">
+                <div class="slide-headline">Digital agriculture mission launched to modernize farming practices</div>
+                <div class="slide-date">February 24, 2026</div>
+            </div>
+        </div>
+        
+        <!-- Navigation Arrows -->
+        <button class="slideshow-nav prev-slide" onclick="changeSlide(-1)">&#10094;</button>
+        <button class="slideshow-nav next-slide" onclick="changeSlide(1)">&#10095;</button>
+        
+        <!-- Navigation Dots -->
+        <div class="slideshow-dots">
+            <span class="dot active" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
+            <span class="dot" onclick="currentSlide(4)"></span>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row">
+            <div class="col col-6">
+                <div class="content-box">
+                    <h2 class="section-title">WHAT'S NEW <a href="#" class="btn-more">More</a></h2>
+                    <ul class="news-list">
+                        <li><a href="#">Recruitment of Three Posts of Stenographer Grade-I...</a></li>
+                        <li><a href="#">Inviting Comments on the draft Pesticides Management Bill, 2023</a></li>
+                        <li><a href="#">Minimum Support Prices (MSP) of Copra for 2024 Season</a></li>
+                        <li><a href="#">Recruitment regarding engagement of two young professionals...</a></li>
+                        <li><a href="#">Standard Operating Procedure (SOP) for Drone Application...</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col col-6">
+                <div class="content-box highlight-news">
+                    <h2 class="section-title">AGRICULTURE NEWS</h2>
+                    <h3>Cabinet approves continuation of schemes of Pradhan Mantri Annadata Aay SanraksHan Abhiyan (PM-AASHA)</h3>
+                    <a href="#" class="download-link">Download (199 KB)</a>
+                    <p class="publish-date">Publish Date: 27.09.2024</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+               
+            </div>
+            <div class="contact-info">
+                
+            </div>
+            <div class="footer-logos">
+                
+            </div>
+            <div class="copyright">
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let slideIndex = 1;
+        let slideInterval;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            showSlides(slideIndex);
+            startAutoSlide();
+        });
+        
+        function showSlides(n) {
+            const slides = document.getElementsByClassName("slide");
+            const dots = document.getElementsByClassName("dot");
+            
+            if (n > slides.length) { slideIndex = 1; }
+            if (n < 1) { slideIndex = slides.length; }
+            
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].classList.remove("active");
+            }
+            
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].classList.remove("active");
+            }
+            
+            slides[slideIndex - 1].classList.add("active");
+            dots[slideIndex - 1].classList.add("active");
+        }
+        
+        function changeSlide(n) {
+            showSlides(slideIndex += n);
+			resetAutoSlide();
+		}
+		
+		function currentSlide(n) {
+			showSlides(slideIndex = n);
+			resetAutoSlide();
+		}
+		
+		function startAutoSlide() {
+			slideInterval = setInterval(function() {
+				changeSlide(1);
+			}, 5000);
+		}
+		
+function resetAutoSlide() { clearInterval(slideInterval); startAutoSlide(); } 
+    </script>
+
+</body>
+</html>

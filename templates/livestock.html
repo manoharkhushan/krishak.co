@@ -1,0 +1,452 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4">Cattle & Livestock Tracker</h1>
+
+    <!-- Tabs for different sections -->
+    <ul class="nav nav-tabs" id="livestockTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="cattle-tab" data-bs-toggle="tab" data-bs-target="#cattle" type="button" role="tab">Cattle</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="vaccinations-tab" data-bs-toggle="tab" data-bs-target="#vaccinations" type="button" role="tab">Vaccinations</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="milk-tab" data-bs-toggle="tab" data-bs-target="#milk" type="button" role="tab">Milk Records</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="estrus-tab" data-bs-toggle="tab" data-bs-target="#estrus" type="button" role="tab">Estrus Cycles</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="livestockTabsContent">
+        <!-- Cattle Tab -->
+        <div class="tab-pane fade show active" id="cattle" role="tabpanel">
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Add New Cattle</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="addCattleForm">
+                                <div class="mb-3">
+                                    <label for="cattleName" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="cattleName" name="name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cattleBreed" class="form-label">Breed</label>
+                                    <input type="text" class="form-control" id="cattleBreed" name="breed">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="dateOfBirth" class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" id="dateOfBirth" name="date_of_birth">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="gender" class="form-label">Gender</label>
+                                    <select class="form-control" id="gender" name="gender" required>
+                                        <option value="">Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="purchaseDate" class="form-label">Purchase Date</label>
+                                    <input type="date" class="form-control" id="purchaseDate" name="purchase_date">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="purchasePrice" class="form-label">Purchase Price</label>
+                                    <input type="number" step="0.01" class="form-control" id="purchasePrice" name="purchase_price">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cattleNotes" class="form-label">Notes</label>
+                                    <textarea class="form-control" id="cattleNotes" name="notes" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success">Add Cattle</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Your Cattle</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Breed</th>
+                                            <th>Gender</th>
+                                            <th>Date of Birth</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cattleTableBody">
+                                        {% for cattle_item in cattle %}
+                                        <tr>
+                                            <td>{{ cattle_item.name }}</td>
+                                            <td>{{ cattle_item.breed or 'N/A' }}</td>
+                                            <td>{{ cattle_item.gender.title() }}</td>
+                                            <td>{{ cattle_item.date_of_birth or 'N/A' }}</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary" data-id="{{ cattle_item.cattle_id }}" onclick="editCattle(this.dataset.id)">Edit</button>
+                                                <button class="btn btn-sm btn-danger" data-id="{{ cattle_item.cattle_id }}" onclick="deleteCattle(this.dataset.id)">Delete</button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vaccinations Tab -->
+        <div class="tab-pane fade" id="vaccinations" role="tabpanel">
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Add Vaccination</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="addVaccinationForm" action="/api/vaccinations" method="post">
+                                <div class="mb-3">
+                                    <label for="vaccinationCattleId" class="form-label">Cattle</label>
+                                    <select class="form-control" id="vaccinationCattleId" name="cattle_id" required>
+                                        <option value="">Select Cattle</option>
+                                        {% for cattle_item in cattle %}
+                                        <option value="{{ cattle_item.cattle_id }}">{{ cattle_item.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="vaccineName" class="form-label">Vaccine Name</label>
+                                    <input type="text" class="form-control" id="vaccineName" name="vaccine_name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="dateAdministered" class="form-label">Date Administered</label>
+                                    <input type="date" class="form-control" id="dateAdministered" name="date_administered" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nextDueDate" class="form-label">Next Due Date</label>
+                                    <input type="date" class="form-control" id="nextDueDate" name="next_due_date">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="administeredBy" class="form-label">Administered By</label>
+                                    <input type="text" class="form-control" id="administeredBy" name="administered_by">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="vaccinationNotes" class="form-label">Notes</label>
+                                    <textarea class="form-control" id="vaccinationNotes" name="notes" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success">Add Vaccination</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Vaccination History</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Cattle</th>
+                                            <th>Vaccine</th>
+                                            <th>Date Administered</th>
+                                            <th>Next Due</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="vaccinationsTableBody">
+                                        {% for vac in vaccinations %}
+                                        <tr>
+                                            <td>{{ vac.cattle_name }}</td>
+                                            <td>{{ vac.vaccine_name }}</td>
+                                            <td>{{ vac.date_administered }}</td>
+                                            <td>{{ vac.next_due_date or 'N/A' }}</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary" data-id="{{ vac.vaccination_id }}" onclick="editVaccination(this.dataset.id)">Edit</button>
+                                                <button class="btn btn-sm btn-danger" data-id="{{ vac.vaccination_id }}" onclick="deleteVaccination(this.dataset.id)">Delete</button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Milk Records Tab -->
+        <div class="tab-pane fade" id="milk" role="tabpanel">
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Add Milk Record</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="addMilkRecordForm" action="/api/milk_records" method="post">
+                                <div class="mb-3">
+                                    <label for="milkCattleId" class="form-label">Cattle</label>
+                                    <select class="form-control" id="milkCattleId" name="cattle_id" required>
+                                        <option value="">Select Cattle</option>
+                                        {% for cattle_item in cattle %}
+                                        <option value="{{ cattle_item.cattle_id }}">{{ cattle_item.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="recordDate" class="form-label">Record Date</label>
+                                    <input type="date" class="form-control" id="recordDate" name="record_date" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="liters" class="form-label">Liters</label>
+                                    <input type="number" step="0.01" class="form-control" id="liters" name="liters" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="milkNotes" class="form-label">Notes</label>
+                                    <textarea class="form-control" id="milkNotes" name="notes" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success">Add Record</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Milk Production Records</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Cattle</th>
+                                            <th>Date</th>
+                                            <th>Liters</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="milkRecordsTableBody">
+                                        {% for record in milk_records %}
+                                        <tr>
+                                            <td>{{ record.cattle_name }}</td>
+                                            <td>{{ record.record_date }}</td>
+                                            <td>{{ record.liters }}</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary" data-id="{{ record.record_id }}" onclick="editMilkRecord(this.dataset.id)">Edit</button>
+                                                <button class="btn btn-sm btn-danger" data-id="{{ record.record_id }}" onclick="deleteMilkRecord(this.dataset.id)">Delete</button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estrus Cycles Tab -->
+        <div class="tab-pane fade" id="estrus" role="tabpanel">
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Add Estrus Cycle</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="addEstrusCycleForm" action="/api/estrus_cycles" method="post">
+                                <div class="mb-3">
+                                    <label for="estrusCattleId" class="form-label">Cattle</label>
+                                    <select class="form-control" id="estrusCattleId" name="cattle_id" required>
+                                        <option value="">Select Cattle</option>
+                                        {% for cattle_item in cattle %}
+                                        <option value="{{ cattle_item.cattle_id }}">{{ cattle_item.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="startDate" class="form-label">Start Date</label>
+                                    <input type="date" class="form-control" id="startDate" name="start_date" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="endDate" class="form-label">End Date</label>
+                                    <input type="date" class="form-control" id="endDate" name="end_date">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="estrusNotes" class="form-label">Notes</label>
+                                    <textarea class="form-control" id="estrusNotes" name="notes" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success">Add Cycle</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Estrus Cycle History</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Cattle</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="estrusCyclesTableBody">
+                                        {% for cycle in estrus_cycles %}
+                                        <tr>
+                                            <td>{{ cycle.cattle_name }}</td>
+                                            <td>{{ cycle.start_date }}</td>
+                                            <td>{{ cycle.end_date or 'Ongoing' }}</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary" data-id="{{ cycle.cycle_id }}" onclick="editEstrusCycle(this.dataset.id)">Edit</button>
+                                                <button class="btn btn-sm btn-danger" data-id="{{ cycle.cycle_id }}" onclick="deleteEstrusCycle(this.dataset.id)">Delete</button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+// Form submission handlers
+document.getElementById('addCattleForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+
+    fetch('/api/cattle', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            alert(result.message);
+            location.reload();
+        } else {
+            alert('Error: ' + result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while adding cattle');
+    });
+});
+
+document.getElementById('addVaccinationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+
+    fetch('/api/vaccinations', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            alert(result.message);
+            location.reload();
+        } else {
+            alert('Error: ' + result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while adding vaccination');
+    });
+});
+
+document.getElementById('addMilkRecordForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+
+    fetch('/api/milk_records', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            alert(result.message);
+            location.reload();
+        } else {
+            alert('Error: ' + result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while adding milk record');
+    });
+});
+
+document.getElementById('addEstrusCycleForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+
+    fetch('/api/estrus_cycles', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            alert(result.message);
+            location.reload();
+        } else {
+            alert('Error: ' + result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while adding estrus cycle');
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}Govt Schemes - Krishak{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Government Agricultural Schemes for Farmers</h2>
+            <p class="text-muted">Explore various government schemes designed to support farmers and improve agricultural productivity.</p>
+
+            <!-- Search and Filter -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" id="schemeSearch" class="form-control" placeholder="Search schemes...">
+                        </div>
+                        <div class="col-md-4">
+                            <select id="schemeCategory" class="form-select">
+                                <option value="all">All Categories</option>
+                                <option value="financial">Financial Support</option>
+                                <option value="insurance">Crop Insurance</option>
+                                <option value="infrastructure">Infrastructure</option>
+                                <option value="technology">Technology & Modernization</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary w-100" onclick="filterSchemes()">Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Schemes Cards -->
+            <div class="row" id="schemesContainer">
+                
+                <!-- PM-KISAN -->
+                <div class="col-md-6 col-lg-4 mb-4 scheme-card" data-category="financial">
+                    <div class="card h-100">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">PM-KISAN</h5>
+                            <small>Pradhan Mantri Kisan Samman Nidhi</small>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Benefits:</strong> ₹6,000 per year directly to farmers' bank accounts in three installments of ₹2,000 each.</p>
+                            <p><strong>Eligibility:</strong> All landholding farmer families (subject to certain exclusions).</p>
+                            <p><strong>How to Apply:</strong> Visit nearest Common Service Centre (CSC) or apply online at pmkisan.gov.in</p>
+                            <a href="https://pmkisan.gov.in" target="_blank" class="btn btn-sm btn-success">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kisan Credit Card -->
+                <div class="col-md-6 col-lg-4 mb-4 scheme-card" data-category="financial">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Kisan Credit Card</h5>
+                            <small>KCC Scheme</small>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Benefits:</strong> Credit limit up to ₹3 lakh at concessional interest rates (4% p.a.), flexible repayment options.</p>
+                            <p><strong>Eligibility:</strong> All farmers - individual/joint borrowers who are owner cultivators, tenant farmers, oral lessees.</p>
+                            <p><strong>How to Apply:</strong> Apply at any bank branch or through bank official website.</p>
+                            <a href="https://www.pmjdy.gov.in/kcc" target="_blank" class="btn btn-sm btn-primary">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pradhan Mantri Fasal Bima Yojana -->
+                <div class="col-md-6 col-lg-4 mb-4 scheme-card" data-category="insurance">
+                    <div class="card h-100">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0">PMFBY</h5>
+                            <small>Pradhan Mantri Fasal Bima Yojana</small>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Benefits:</strong> Low premium (2% for Kharif, 1.5% for Rabi crops), full sum insured for crop loss due to natural calamities.</p>
+                            <p><strong>Eligibility:</strong> All farmers including sharecroppers and tenant farmers.</p>
+                            <p><strong>How to Apply:</strong> Through bank branch, CSC, or official PMFBY portal.</p>
+                            <a href="https://pmfby.gov.in" target="_blank" class="btn btn-sm btn-warning">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Soil Health Card Scheme -->
+                <div class="col-md-6 col-lg-4 mb-4 scheme-card" data-category="technology">
+                    <div class="card h-100">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">Soil Health Card</h5>
+                            <small>National Soil Health Card Mission</small>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Benefits:</strong> Free soil testing, personalized fertilizer recommendations based on soil nutrient status.</p>
+                            <p><strong>Eligibility:</strong> All farmers across the country.</p>
+                            <p><strong>How to Apply:</strong> Visit nearest soil testing laboratory or apply through state agricultural department.</p>
+                            <a href="https://soilhealth.dac.gov.in" target="_blank" class="btn btn-sm btn-info">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pradhan Mantri Krishi Sinchayee Yojana -->
+                <div class="col-md-6 col-lg-4 mb-4 scheme-card" data-category="infrastructure">
+                    <div class="card h-100">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">PMKSY</h5>
+                            <small>Pradhan Mantri Krishi Sinchayee Yojana</small>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Benefits:</strong> Financial assistance for irrigation infrastructure, drip irrigation, sprinkler systems, water harvesting structures.</p>
+                            <p><strong>Eligibility:</strong> All farmers, especially those in water-scarce regions.</p>
+                            <p><strong>How to Apply:</strong> Apply through state agriculture department or district agricultural office.</p>
+                            <a href="https://pmksy.gov.in" target="_blank" class="btn btn-sm btn-success">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- e-NAM -->
+                <div class="col-md-6 col-lg-4 mb-4 scheme-card" data-category="technology">
+                    <div class="card h-100">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">e-NAM</h5>
+                            <small>Electronic National Agriculture Market</small>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Benefits:</strong> Online trading platform, transparent price discovery, single license across multiple mandis, real-time price information.</p>
+                            <p><strong>Eligibility:</strong> Farmers, traders, and commission agents registered with APMC mandis.</p>
+                            <p><strong>How to Apply:</strong> Register at eNAM portal or through local APMC mandi.</p>
+                            <a href="https://enam.gov.in" target="_blank" class="btn btn-sm btn-dark">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paramparagat Krishi Vikas Yojana -->
+                <div class="col-md-6 col-lg-4 mb-4 scheme-card" data-category="technology">
+                    <div class="card h-100">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">PKVY</h5>
+                            <small>Paramparagat Krishi Vikas Yojana</small>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Benefits:</strong> Financial assistance for organic farming, ₹20,000 per hectare for 3 years, certification support.</p>
+                            <p><strong>Eligibility:</strong> Farmer groups, FPOs, or individual farmers interested in organic farming.</p>
+                            <p><strong>How to Apply:</strong> Apply through state agricultural department or District Agricultural Officer.</p>
+                            <a href="https://pgsindia.co.in" target="_blank" class="btn btn-sm btn-success">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Agricultural Mechanization -->
+                <div class="col-md-6 col-lg-4 mb-4 scheme-card" data-category="infrastructure">
+                    <div class="card h-100">
+                        <div class="card-header bg-secondary text-white">
+                            <h5 class="mb-0">SMAM</h5>
+                            <small>Sub-Mission on Agricultural Mechanization</small>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Benefits:</strong> 35-50% subsidy on agricultural machinery, custom hiring centers, training for farmers.</p>
+                            <p><strong>Eligibility:</strong> Small and marginal farmers get higher subsidy, also available for custom hiring centers.</p>
+                            <p><strong>How to Apply:</strong> Through state agricultural engineering department or district agricultural office.</p>
+                            <a href="https://farmech.dac.gov.in" target="_blank" class="btn btn-sm btn-secondary">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- National Mission for Sustainable Agriculture -->
+                <div class="col-md-6 col-lg-4 mb-4 scheme-card" data-category="technology">
+                    <div class="card h-100">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">NMSA</h5>
+                            <small>National Mission for Sustainable Agriculture</small>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Benefits:</strong> Support for climate-resilient farming, water use efficiency, organic farming, crop diversification.</p>
+                            <p><strong>Eligibility:</strong> Farmers practicing or interested in sustainable agriculture practices.</p>
+                            <p><strong>How to Apply:</strong> Through state agricultural department or District Agricultural Officer.</p>
+                            <a href="https://nmsa.dac.gov.in" target="_blank" class="btn btn-sm btn-success">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PM-AASHA -->
+                <div class="col-md-6 col-lg-4 mb-4 scheme-card" data-category="financial">
+                    <div class="card h-100">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0">PM-AASHA</h5>
+                            <small>Pradhan Mantri Annadata Aay SanraksHan Abhiyan</small>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Benefits:</strong> Minimum Support Price (MSP) for pulses, oilseeds, and copra, procurement through government agencies.</p>
+                            <p><strong>Eligibility:</strong> Farmers growing pulses, oilseeds, and copra.</p>
+                            <p><strong>How to Apply:</strong> Through local procurement center or state agricultural department.</p>
+                            <a href="https://pmaasha.nic.in" target="_blank" class="btn btn-sm btn-warning">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RKVY -->
+                <div class="col-md-6 col-lg-4 mb-4 scheme-card" data-category="infrastructure">
+                    <div class="card h-100">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">RKVY-RAFTAAR</h5>
+                            <small>Rashtriya Krishi Vikas Yojana</small>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Benefits:</strong> Financial assistance for agricultural development projects, infrastructure, value chain development.</p>
+                            <p><strong>Eligibility:</strong> State governments, implementing agencies, farmer groups.</p>
+                            <p><strong>How to Apply:</strong> Through state agricultural department or district agricultural office.</p>
+                            <a href="https://rkvy.nic.in" target="_blank" class="btn btn-sm btn-success">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kisan Call Centre -->
+                <div class="col-md-6 col-lg-4 mb-4 scheme-card" data-category="technology">
+                    <div class="card h-100">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">Kisan Call Centre</h5>
+                            <small>Agricultural Helpline Service</small>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Benefits:</strong> Free agricultural advice in local languages, expert guidance on farming techniques, pest management, weather information.</p>
+                            <p><strong>Eligibility:</strong> All farmers across India.</p>
+                            <p><strong>How to Apply:</strong> Call toll-free number 1800-XXX-XXXX (state-wise numbers available).</p>
+                            <a href="https://mkisan.gov.in" target="_blank" class="btn btn-sm btn-info">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Important Notes -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Important Information</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-info-circle text-info me-2"></i>Schemes and benefits may vary by state. Please check with your local agricultural department for state-specific details.</li>
+                        <li><i class="fas fa-info-circle text-info me-2"></i>Always verify eligibility criteria before applying for any scheme.</li>
+                        <li><i class="fas fa-info-circle text-info me-2"></i>Documents like Aadhaar card, land records, and bank account details are generally required for most schemes.</li>
+                        <li><i class="fas fa-info-circle text-info me-2"></i>For more information, visit the nearest Common Service Centre (CSC) or Krishi Vigyan Kendra (KVK).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Contact for Assistance</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Ministry of Agriculture & Farmers Welfare</h6>
+                            <p>Website: <a href="https://agricoop.nic.in" target="_blank">agricoop.nic.in</a></p>
+                            <p>Helpline: 011-23381111</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Common Service Centres (CSC)</h6>
+                            <p>Find nearest CSC: <a href="https://csccloud.in" target="_blank">csccloud.in</a></p>
+                            <p>Toll-free: 1800-XXX-XXXX</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function filterSchemes() {
+    const searchText = document.getElementById('schemeSearch').value.toLowerCase();
+    const category = document.getElementById('schemeCategory').value;
+    const cards = document.querySelectorAll('.scheme-card');
+
+    cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        const cardCategory = card.getAttribute('data-category');
+        
+        const matchesSearch = text.includes(searchText);
+        const matchesCategory = category === 'all' || cardCategory === category;
+
+        if (matchesSearch && matchesCategory) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+document.getElementById('schemeSearch').addEventListener('input', filterSchemes);
+</script>
+{% endblock %}
